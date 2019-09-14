@@ -64,7 +64,7 @@ class NetAppSkill(Skill):
     @match_regex('create a (?P<size>[0-9:]+) MB volume called (?P<name>[\w\'_]+) on svm (?P<svm>[\w\'_]+) and aggregate (?P<aggr>[\w\'_]+)')
     async def create_volume(self, message):
         """
-        A skills function to get ontap cluster name. The parser looks for the message argument.
+        A skills function to create a volume. The parser looks for the message argument.
 
         Arguments:
             message {str} -- create a {size} MB volume called {name} on svm {svm} and aggregate {aggr}
@@ -76,3 +76,18 @@ class NetAppSkill(Skill):
         volume = Volume.from_dict({'name': name, 'svm': {'name': svm}, 'size': int(size)*1024*1024, 'aggregates': [{'name': aggr}]})
         volume.post()
         await message.respond('All done! Response: {}'.format(volume))
+
+    @match_regex('delete volume (?P<name>[\w\'_]+) on svm (?P<svm>[\w\'_]+)')
+    async def delete_volume(self, message):
+        """
+        A skills function to delete a volume. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- delete volume {name} on svm {svm}
+        """
+        name = message.regex.group('name')
+        svm = message.regex.group('svm')
+        volume = Volume.find(name=name, svm=svm)
+        volume.delete()
+        await message.respond('All done! Response: {}'.format(volume))
+        
