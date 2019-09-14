@@ -25,6 +25,18 @@ class NetAppSkill(Skill):
     def __init__(self, opsdroid, config):
         super(NetAppSkill, self).__init__(opsdroid, config)
 
+    @match_regex('get ontap cluster info')
+    async def get_cluster_info(self, message):
+        """
+        A skills function to get ontap cluster information. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- get ontap cluster info
+        """
+        clus = Cluster()
+        clus.get()
+        await message.respond('All done! Response: {}'.format(clus))
+
     @match_regex('get ontap cluster version')
     async def get_cluster_version(self, message):
         """
@@ -36,3 +48,15 @@ class NetAppSkill(Skill):
         clus = Cluster()
         clus.get()
         await message.respond('All done! Response: {}'.format(clus.version))
+
+    @match_regex('get ontap cluster name')
+    async def get_cluster_version(self, message):
+        """
+        A skills function to get ontap cluster name. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- get ontap cluster name
+        """
+        clus = Cluster()
+        clus.get()
+        await message.respond('All done! Response: {}'.format(clus.name))
