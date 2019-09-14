@@ -105,3 +105,18 @@ class NetAppSkill(Skill):
             vol.get(fields='name')
             volumes.append(vol.name)
         await message.respond('All done! Response: {}'.format(volumes))
+
+    @match_regex('get all aggregates on ontap cluster')
+    @match_regex('get aggregates on cluster')
+    async def get_aggregates(self, message):
+        """
+        A skills function to get all aggregates on the cluster. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- get aggregates on cluster
+        """
+        aggregates = []
+        for aggr in Aggregate.get_collection():
+            aggr.get(fields='name')
+            aggregates.append(aggr.name)
+        await message.respond('All done! Response: {}'.format(aggregates))
