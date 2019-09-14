@@ -26,7 +26,7 @@ class NetAppSkill(Skill):
         super(NetAppSkill, self).__init__(opsdroid, config)
 
     @match_regex('get ontap cluster info')
-    async def get_cluster_version(self, message):
+    async def get_cluster_info(self, message):
         """
         A skills function to get ontap cluster information. The parser looks for the message argument.
 
