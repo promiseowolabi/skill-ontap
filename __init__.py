@@ -90,4 +90,18 @@ class NetAppSkill(Skill):
         volume = Volume.find(name=name, svm=svm)
         volume.delete()
         await message.respond('All done! Response: {}'.format(volume))
-        
+
+    @match_regex('get volumes on svm (?P<svm>[\w\'_]+)')
+    async def get_volumes(self, message):
+        """
+        A skills function to get volumes on an SVM. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- get volumes on svm {svm}
+        """
+        svm = message.regex.group('svm')
+        volumes = []
+        for vol in Volume.get_collection(svm=svm):
+            vol.get(fields='name')
+            volumes.append(vol.name)
+        await message.respond('All done! Response: {}'.format(volumes))
