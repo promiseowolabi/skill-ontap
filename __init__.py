@@ -60,3 +60,19 @@ class NetAppSkill(Skill):
         clus = Cluster()
         clus.get()
         await message.respond('All done! Response: {}'.format(clus.name))
+    
+    @match_regex('create a (?P<size>[0-9:]+) MB volume called (?P<name>[\w\'_]+) on svm (?P<svm>[\w\'_]+) and aggregate (?P<aggr>[\w\'_]+)')
+    async def create_volume(self, message):
+        """
+        A skills function to get ontap cluster name. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- create a {size} MB volume called {name} on svm {svm} and aggregate {aggr}
+        """
+        name = message.regex.group('name')
+        size = message.regex.group('size')
+        aggr = message.regex.group('aggr')
+        svm = message.regex.group('svm')
+        volume = Volume.from_dict({'name': name, 'svm': {'name': svm}, 'size': int(size)*1024*1024, 'aggregates': [{'name': aggr}]})
+        volume.post()
+        await message.respond('All done! Response: {}'.format(volume))
