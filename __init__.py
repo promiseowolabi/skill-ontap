@@ -71,10 +71,8 @@ class NetAppSkill(Skill):
         """
         name = message.regex.group('name')
         size = message.regex.group('size')
-        size = int(size) * 1024 * 1024
         aggr = message.regex.group('aggr')
         svm = message.regex.group('svm')
-
-        volume = Volume.from_dict({'name': name, 'svm': {'name': svm}, 'size': size, 'aggregates': [{'name': aggr}]})
+        volume = Volume.from_dict({'name': name, 'svm': {'name': svm}, 'size': int(size)*1024*1024, 'aggregates': [{'name': aggr}]})
         volume.post()
         await message.respond('All done! Response: {}'.format(volume))
