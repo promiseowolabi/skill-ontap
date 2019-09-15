@@ -50,7 +50,7 @@ class NetAppSkill(Skill):
         await message.respond('All done! Response: {}'.format(clus.version))
 
     @match_regex('get ontap cluster name')
-    async def get_cluster_version(self, message):
+    async def get_cluster_name(self, message):
         """
         A skills function to get ontap cluster name. The parser looks for the message argument.
 
@@ -106,7 +106,7 @@ class NetAppSkill(Skill):
             volumes.append(vol.name)
         await message.respond('All done! Response: {}'.format(volumes))
 
-    @match_regex('get all aggregates on ontap cluster')
+    @match_regex('get all aggregates on cluster')
     @match_regex('get aggregates on cluster')
     async def get_aggregates(self, message):
         """
@@ -121,8 +121,8 @@ class NetAppSkill(Skill):
             aggregates.append(aggr.name)
         await message.respond('All done! Response: {}'.format(aggregates))
 
-    @match_regex('get all ports state on cluster')
-    @match_regex('get ports state on cluster')
+    @match_regex('get all ports on cluster')
+    @match_regex('get ports on cluster')
     async def get_ports(self, message):
         """
         A skills function to get all ports state on the cluster. The parser looks for the message argument.
@@ -135,3 +135,18 @@ class NetAppSkill(Skill):
             port.get()
             ports.append([port.name, port.state])
         await message.respond('All done! Response: {}'.format(ports))
+
+    @match_regex('get all interfaces on cluster')
+    @match_regex('get interfaces on cluster')
+    async def get_interfaces(self, message):
+        """
+        A skills function to get all interfaces on the cluster. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- get interfaces state on cluster
+        """
+        interfaces = []
+        for interface in IpInterface.get_collection():
+            interface.get()
+            interfaces.append([interface.name, interface.state])
+        await message.respond('All done! Response: {}'.format(interfaces))
