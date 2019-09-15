@@ -1,8 +1,9 @@
 from opsdroid.skill import Skill
 from opsdroid.matchers import match_regex
+from datetime import datetime
 from netapp_ontap import config
 from netapp_ontap import HostConnection
-from netapp_ontap.resources import Cluster, Aggregate, Port, Volume, Autosupport, IpInterface, Disk, Chassis, Account, Svm
+from netapp_ontap.resources import Cluster, Aggregate, Port, Volume, Autosupport, IpInterface, Disk, Snapshot, Account, Svm
 import urllib3
 
 # To enable certificate warnings comment the line below:
@@ -150,3 +151,25 @@ class NetAppSkill(Skill):
             interface.get()
             interfaces.append([interface.name, interface.state])
         await message.respond('All done! Response: {}'.format(interfaces))
+
+    @match_regex('create a snapshot of (?P<name>[\w\'_]+) on svm (?P<svm>[\w\'_]+)')
+    @match_regex('take a snapshot of (?P<name>[\w\'_]+) on svm (?P<svm>[\w\'_]+)')
+    async def create_snapshot(self, message):
+        """
+        A skills function to take a snapshot of a volume. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- create a snapshot of {volume} on svm {svm}
+        """
+        name = message.regex.group('name')
+        svm = message.regex.group('svm')
+        time = datetime.now()
+        time = str(time)
+        volume = Volume.find(name=name, svm={'name': svm})
+        volume.get()
+        snapshot = Snapshot.from_dict({
+        'name': 'snapshot_%s' % time,
+        'volume': volume.to_dict(),
+        })
+        snapshot.post()
+        await message.respond('All done! Response: {}'.format(snapshot))

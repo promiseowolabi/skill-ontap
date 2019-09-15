@@ -9,3 +9,4 @@
 `get all aggregates on cluster` or `get aggregates on cluster`
 `get all ports state on cluster` or `get ports state on cluster`
 `get all interfaces on cluster` or `get interfaces on cluster`
+`create a snapshot of {volume} on svm {svm}` or `take a snapshot of {volume} on svm {svm}`
