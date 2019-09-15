@@ -120,3 +120,18 @@ class NetAppSkill(Skill):
             aggr.get(fields='name')
             aggregates.append(aggr.name)
         await message.respond('All done! Response: {}'.format(aggregates))
+
+    @match_regex('get all ports state on cluster')
+    @match_regex('get ports state on cluster')
+    async def get_ports(self, message):
+        """
+        A skills function to get all ports state on the cluster. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- get ports state on cluster
+        """
+        ports = []
+        for port in Port.get_collection():
+            port.get()
+            ports.append([port.name, port.state])
+        await message.respond('All done! Response: {}'.format(ports))
