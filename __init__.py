@@ -173,3 +173,19 @@ class NetAppSkill(Skill):
         })
         snapshot.post()
         await message.respond('All done! Response: {}'.format(snapshot))
+
+    @match_regex('create a clone of (?P<volume>[\w\'_]+) on svm (?P<svm>[\w\'_]+) called (?P<name>[\w\'_]+)')
+    @match_regex('create a flexclone of (?P<volume>[\w\'_]+) on svm (?P<svm>[\w\'_]+) called (?P<name>[\w\'_]+)')
+    async def create_flexclone(self, message):
+        """
+        A skills function to create a clone of a volume. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- create a clone of {volume} on svm {svm} called {name}
+        """
+        parent_volume = message.regex.group('volume')
+        svm = message.regex.group('svm')
+        name = message.regex.group('name')
+        flexclone = Volume.from_dict({"name": name, "clone": {"parent_volume": {"name": parent_volume}, "is_flexclone": "true"}, "svm": {"name": svm}})
+        flexclone.post()
+        await message.respond('All done! Response: {}'.format(flexclone))
