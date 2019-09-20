@@ -189,3 +189,20 @@ class NetAppSkill(Skill):
         flexclone = Volume.from_dict({"name": name, "clone": {"parent_volume": {"name": parent_volume}, "is_flexclone": "true"}, "svm": {"name": svm}})
         flexclone.post()
         await message.respond('All done! Response: {}'.format(flexclone))
+
+    @match_regex('create and mount a (?P<size>[0-9:]+) MB volume called (?P<name>[\w\'_]+) on svm (?P<svm>[\w\'_]+) and aggregate (?P<aggr>[\w\'_]+)')
+    @match_regex('create and mount a (?P<size>[0-9:]+) MB volume (?P<name>[\w\'_]+) on svm (?P<svm>[\w\'_]+) (?P<aggr>[\w\'_]+)')
+    async def create_volume(self, message):
+        """
+        A skills function to create a volume. The parser looks for the message argument.
+
+        Arguments:
+            message {str} -- create a {size} MB volume called {name} on svm {svm} and aggregate {aggr}
+        """
+        name = message.regex.group('name')
+        size = message.regex.group('size')
+        aggr = message.regex.group('aggr')
+        svm = message.regex.group('svm')
+        volume = Volume.from_dict({'name': name, 'svm': {'name': svm}, 'nas': {'path': '/'+name} , 'size': int(size)*1024*1024, 'aggregates': [{'name': aggr}]})
+        volume.post()
+        await message.respond('All done! Response: {}'.format(volume))

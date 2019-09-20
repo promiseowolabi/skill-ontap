@@ -89,6 +89,7 @@ On you chosen chat service, these are some example messages based on regex_match
 * `get all interfaces on cluster` or `get interfaces on cluster`
 * `create a snapshot of {volume} on svm {svm}` or `take a snapshot of {volume} on svm {svm}`
 * `create a clone of {volume} on svm {svm} called {name}` or `create a flexclone of {volume} on svm {svm} called {name}`
+* `create and mount a {size} MB volume {name} on {svm} {aggr}` or `create and mount a {size} MB volume called {name} on svm {svm} and aggregate {aggr}`
 
 Slack: Enclose hostnames, FQDN values in < > i.e. <sqlhost.netapp.com> to avoid Slack unfurling which cause hostname not found errors.
 
